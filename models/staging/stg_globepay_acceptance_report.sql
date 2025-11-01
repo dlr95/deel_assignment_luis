@@ -10,8 +10,8 @@ cleaned_and_renamed as (
 
     select
         external_ref,
-        status as is_transaction_successful,
-        source as payment_source,
+        status,
+        source,
         ref as payment_ref,
         cast(date_time as timestamp) as transaction_at,
         state,
