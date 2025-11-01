@@ -23,6 +23,8 @@ select
     acc.external_ref,
     acc.transaction_at,
     acc.state,
+    acc.state = 'ACCEPTED' as is_accepted,
+    acc.state = 'DECLINED' as is_declined,
     acc.status,
     acc.is_cvv_provided,
     acc.local_amount,
