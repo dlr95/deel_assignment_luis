@@ -2,7 +2,7 @@ with source as (
 
     select
         *
-    from {{ source('globepay', 'globepay_acceptance_report_cleaned') }}
+        from {{ source('globepay', 'globepay_acceptance_report_cleaned') }}
 
 ),
 
@@ -19,28 +19,38 @@ cleaned_and_renamed as (
         amount as local_amount,
         country,
         currency,
-        -- fix the broken json by adding quotes to keys (e.g., CAD: -> "CAD":)
+        -- step 1: fix the broken json by adding quotes to keys (e.g., cad: -> "cad":)
         regexp_replace(rates, r'([A-Z]{3}):', r'"\1":') as rates_json_string
-    from source
+        from source
+
+),
+
+-- new step to call the macro once and avoid repetition
+with_exchange_rate as (
+
+    select
+        *,
+        -- step 2: call the macro to get the exchange rate
+        {{ get_exchange_rate('currency', 'rates_json_string') }} as exchange_rate
+    
+        from cleaned_and_renamed
 
 ),
 
 final as (
 
     select
+        -- select all columns from the previous step
         *,
-        -- now that the json is valid, we can extract the rate and divide
+
+        -- step 3: calculate the usd amount using the new exchange_rate column
         safe_divide(
             local_amount,
-            cast(
-                json_extract_scalar(
-                    rates_json_string,
-                    concat('$.', currency)
-                ) as numeric
-            )
+            exchange_rate
         ) as amount_in_usd
-    from cleaned_and_renamed
 
+        from with_exchange_rate
 )
 
-select * from final
+select 
+    * from final
