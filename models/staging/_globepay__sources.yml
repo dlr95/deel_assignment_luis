@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: globepay
+    description: "raw data loaded from globepay csvs into bigquery."
+    # update this with your project and dataset (schema) name
+    database: deel-assignment-476916
+    schema: globepay_raw
+
+    tables:
+      - name: globepay_acceptance_report_cleaned
+        description: "raw acceptance data from the 'tab trick' csv load. rates column is not valid json."
+      - name: globepay_chargeback_report
+        description: "raw chargeback data."
