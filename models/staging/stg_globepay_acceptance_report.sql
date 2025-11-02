@@ -19,7 +19,7 @@ cleaned_and_renamed as (
         amount as local_amount,
         country,
         currency,
-        -- step 1: fix the broken json by adding quotes to keys (e.g., cad: -> "cad":)
+        -- fix the broken json by adding quotes to keys (e.g., cad: -> "cad":)
         regexp_replace(rates, r'([A-Z]{3}):', r'"\1":') as rates_json_string
         from source
 
@@ -30,7 +30,7 @@ with_exchange_rate as (
 
     select
         *,
-        -- step 2: call the macro to get the exchange rate
+        -- call the macro to get the exchange rate
         {{ get_exchange_rate('currency', 'rates_json_string') }} as exchange_rate
     
         from cleaned_and_renamed
