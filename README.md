@@ -28,14 +28,5 @@ Takes the most complex transformations e.g., splits USD amounts by accepted vs d
 ## Reporting
 The model that is synced with Looker Studio
 
-# Task 1 - Report of declining payment rate
-The most complex logic (a macro to determine the exchange rate, the USD calculations, etc.) are done inside dbt.
-The rpt table is shown in Looker, where we add the acceptance rate as a calculated field. 
-        count(
-            case
-                when state = 'ACCEPTED' then 1
-                else null
-            end
-        ) / count(external_ref)
-
-The dashboard explains the potential reasons for this decline.
+# Macros
+The get_exchange_rate.sql macro takes the case statement to safely extract the correct exchange rate for a given currency.
