@@ -17,16 +17,20 @@ Methodology includes:
 * I am doing more transformations in staging than I would normally do in a dbt project, but I thought handling the rates issue ASAP would clarify 
 * I am assuming it is important to follow dbt's best practices; hence I am adding tests, a macro to avoid repeating SQL code and in-code comments.
 
-# Task 0: dbt project
+# Staging
+They should be materialised as views for light transformations. 
+They help me clean data, ensure columns have understandable names and arrange exchange rates to convert them to the required USD reporting.
+When possible, we should establish incrementality strategies to save costs.
 
-## Staging
-Arrange the rates JSON so that it can be used to determine USD payments starting from any currency
+# Intermediate
+They handle the most complex transformations of the lineage. 
+In this particular lineage, I join acceptance and chargeback based on the external ref. 
+I also use case-when to show the accepted, declined and chargeback usd amounts as separate columns.
 
-## Intermediate
-Takes the most complex transformations e.g., splits USD amounts by accepted vs declined
-
-## Reporting
-The model that is synced with Looker Studio
+# Reporting
+The rpt models that are exposed to BI tools. 
+In this case, my reporting model is exposed to Looker Studio via BigQuery. 
+I have added additional calculated fields in Looker Studio, that you can find explained in task 1.
 
 # Macros
 The get_exchange_rate.sql macro takes the case statement to safely extract the correct exchange rate for a given currency.
