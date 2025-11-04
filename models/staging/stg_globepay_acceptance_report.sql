@@ -43,7 +43,7 @@ final as (
         -- select all columns from the previous step
         *,
 
-        -- step 3: calculate the usd amount using the new exchange_rate column
+        -- calculate the usd amount using the new exchange_rate column
         safe_divide(
             local_amount,
             exchange_rate
