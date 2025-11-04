@@ -1,6 +1,7 @@
 {% macro get_exchange_rate(currency_col, rates_json_col) %}
     
-    -- this macro contains the case statement to safely extract
+    -- this macro contains the case statement to safely extract. 
+    -- could have I used a for loop to make it more efficient and bulletproof it against future currencies?
     -- the correct exchange rate for a given currency.
     case
         when {{ currency_col }} = 'USD' then cast(json_extract_scalar({{ rates_json_col }}, '$.USD') as numeric)

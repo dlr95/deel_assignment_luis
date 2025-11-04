@@ -2,8 +2,7 @@ with acceptance as (
 
     select
         *
-    from
-        {{ ref('stg_globepay_acceptance_report') }}
+        from {{ ref('stg_globepay_acceptance_report') }}
 
 ),
 
@@ -13,8 +12,7 @@ chargeback as (
         -- we only need the ref and the flag
         external_ref,
         has_chargeback
-    from
-        {{ ref('stg_globepay_chargeback') }}
+        from {{ ref('stg_globepay_chargeback') }}
 
 )
 
@@ -54,8 +52,6 @@ select
         else 0
     end as chargeback_amount_usd
 
-from
-    acceptance as acc
-left join
-    chargeback as chg
+from acceptance as acc
+    left join chargeback as chg
         on acc.external_ref = chg.external_ref

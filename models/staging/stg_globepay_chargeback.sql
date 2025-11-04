@@ -14,8 +14,7 @@ renamed as (
         source,
         -- this is the important boolean flag
         chargeback as has_chargeback
-    from
-        source
+        from source
 )
 
 select
